@@ -1,14 +1,23 @@
 #include "monty.h"
 
 /**
- * pall - prints everything in stack
- * @stack: doubly linked list
- * @line_number: the line
- *
- * Return: Nothing.
+ * _pall - print all linked list node data.
+ * @head: address of linked list's head.
+ * @line_number: the line number of the monty file we're treating.
+ * Return: nothing.
  */
-void pall(stack_t **stack, unsigned int line_number)
+void _pall(stack_t **head, unsigned int line_number)
 {
-(void)line_number;
-print_dlistint(*stack);
+	stack_t *h = *head;
+
+	(void)line_number;
+
+	if (*head == NULL)
+		return;
+	while (h)
+	{
+		printf("%d\n", h->n);
+		h = h->next;
+	}
 }
+
