@@ -1,10 +1,11 @@
-#ifndef MONTY_H
-#define MONTY_H
-
+#ifndef HEAD
+#define HEAD
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
+
+extern int error;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -36,70 +37,59 @@ char *opcode;
 void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/**
- * struct arguments - Values to be accessed by various functions
- * @argv: Name of the executable
- * @counter: counts number of lines
- * @line: input line
- * @stack: doubly linked list
- * @file: file
- * @order: FIFO or LIFO
- */
-typedef struct arguments
-{
-char **argv;
-ssize_t counter;
-char *line;
-stack_t *stack;
-FILE *file;
-int order;
-} args_t;
+void _push(stack_t **stack, unsigned int line_number, char *str, int *mode);
 
-/* str-ops functions start */
-void pchar(stack_t **stack, unsigned int line_number);
-void pstr(stack_t **stack, unsigned int line_number);
-void nop(stack_t **stack, unsigned int line_number);
-void rotl(stack_t **stack, unsigned int line_number);
-void rotr(stack_t **stack, unsigned int line_number);
-/* str-ops functions end*/
+char *check_push_arg(char *token, unsigned int line_number);
 
-/* opcodes functions start */
-void push(stack_t **stack, unsigned int line_number);
-void pall(stack_t **stack, unsigned int line_number);
-void pop(stack_t **stack, unsigned int line_number);
-void pint(stack_t **stack, unsigned int line_number);
-void swap(stack_t **stack, unsigned int line_number);
-/* opcodes functions end*/
+void treat_line(stack_t **head, FILE *fp, char *line,
+		unsigned int line_number, int *mode);
 
-/* interpreter functions start */
-void monty(void);
-void caller(void);
-void cleaner(void);
-stack_t *add_dnodeint_end(stack_t **head, const int n);
-/* interpreter functions end*/
+void treat_token(stack_t **head, FILE *fp, char *line,
+		 char *token, unsigned int line_number, int *mode);
 
-/* interpreter-ii functions start */
-void stack(stack_t **stack, unsigned int line_number);
-void queue(stack_t **stack, unsigned int line_number);
-/* interpreter-ii functions end*/
+void (*get_function(char *token))(stack_t **, unsigned int);
 
-/* math-ops functions start */
-void add(stack_t **stack, unsigned int line_number);
-void sub(stack_t **stack, unsigned int line_number);
-void divide(stack_t **stack, unsigned int line_number);
-void mul(stack_t **stack, unsigned int line_number);
-void mod(stack_t **stack, unsigned int line_number);
-/* math-ops functions end*/
+void get_invalid_opcode(char *token, unsigned int line_number);
 
-/* linkedlist functions start */
-stack_t *add_dnodeint(stack_t **head, const int n);
-size_t print_dlistint(const stack_t *h);
-int delete_dnodeint_at_index(stack_t **head, unsigned int index);
-void free_dlistint(stack_t *head);
-size_t stack_size(const stack_t *h);
-int check_string(char *s);
-/* linkedlist functions end*/
+int is_number(char *str, unsigned int line_number);
 
-extern args_t args;
+void get_usage_err(unsigned int line_number);
 
-#endif /* ifndef MONTY_H*/
+void _pall(stack_t **head, unsigned int line_number);
+
+void _pint(stack_t **head, unsigned int line_number);
+
+void _pop(stack_t **head, unsigned int line_number);
+
+void _swap(stack_t **head, unsigned int line_number);
+
+void _add(stack_t **head, unsigned int line_number);
+
+void _nop(stack_t **head, unsigned int line_number);
+
+void _sub(stack_t **head, unsigned int line_number);
+
+void _div(stack_t **head, unsigned int line_number);
+
+void _mul(stack_t **head, unsigned int line_number);
+
+void _mod(stack_t **head, unsigned int line_number);
+
+void _pchar(stack_t **head, unsigned int line_number);
+
+void _pstr(stack_t **head, unsigned int line_number);
+
+void _rotl(stack_t **head, unsigned int line_number);
+
+void _rotr(stack_t **head, unsigned int line_number);
+
+void free_list(stack_t **head, FILE *fp, char *line);
+
+int check_mode(char *token, int *mode);
+
+void stack_push(stack_t **head, stack_t **new);
+
+void enqueue(stack_t **head, stack_t **new);
+
+
+#endif
